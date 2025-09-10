@@ -177,6 +177,8 @@ An intelligent AI-powered gym management system that creates a personalized fitn
    GOOGLE_SHEET_ID=your-form-response-sheet-id
    
    # Email
+   COMPOSIO_API_KEY = your-api-key
+   COMPOSIO USER ID = your-user-id
    RECIPIENT_EMAIL=your-email@example.com
    ```
 
