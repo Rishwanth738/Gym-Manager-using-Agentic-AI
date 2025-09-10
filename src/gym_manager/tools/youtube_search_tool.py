@@ -2,9 +2,6 @@ import os
 import requests
 from crewai.tools import tool
 
-
-
-# Make sure you set: export SERPER_API_KEY="your_api_key"
 SERPER_API_KEY = os.getenv("SERPER_API_KEY")
 
 @tool("YouTubeSearchTool")

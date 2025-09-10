@@ -78,10 +78,11 @@ An intelligent AI-powered gym management system that creates a personalized fitn
 - JSON: Daily recommendations
 
 ### Integrations
-- Google Forms: Data collection
-- Gmail: Automated communications
-- YouTube: Exercise and recipe videos
-- Serper API: Content search
+- Google Forms & Sheets: Data collection
+- Composio with GeminiProvider: Email automation
+- Serper API: YouTube video search
+- PostgreSQL: Data persistence
+- Chroma DB: Vector storage
 
 ### Memory Systems
 - Week-long training history
@@ -132,10 +133,11 @@ An intelligent AI-powered gym management system that creates a personalized fitn
 
 ### Communication Tools
 1. **Survey Email Tool**
-   - Gmail integration for daily surveys
-   - HTML email templates
-   - Scheduled delivery at 6 PM
-   - Error handling and delivery confirmation
+   - Composio integration with GeminiProvider for email handling
+   - Custom HTML email templates via `survey_email_template.py`
+   - Automated survey delivery at 6 PM
+   - Error handling and delivery status tracking
+   - Uses Composio's GMAIL_SEND_EMAIL tool for reliable delivery
 
 ### Special Purpose Tools
 1. **Planner Tool**
@@ -176,7 +178,8 @@ An intelligent AI-powered gym management system that creates a personalized fitn
    DATABASE_URL=your-postgres-url
    GOOGLE_SHEET_ID=your-form-response-sheet-id
    
-   # Email
+   # Composio Configuration
+   COMPOSIO_USER_ID=your-composio-user-id
    RECIPIENT_EMAIL=your-email@example.com
    ```
 
@@ -215,6 +218,8 @@ Daily outputs in JSON format:
 - psycopg2-binary
 - schedule
 - python-dotenv
+- composio
+- composio_gemini
 
 ## Contributing 🤝
 

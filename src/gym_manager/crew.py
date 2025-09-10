@@ -11,7 +11,7 @@ from crewai.memory.storage.ltm_sqlite_storage import LTMSQLiteStorage
 from google import genai
 from pydantic import BaseModel
 from datetime import datetime as DateTime
-# --- Load environment variables ---
+
 load_dotenv()
 
 # --- Set up memory storage ---
@@ -22,7 +22,7 @@ llma = LLM(
     model="gemini/gemini-1.5-flash",
 )
 gapi = os.getenv("GEMINI_API_KEY")
-# Different memory configurations for different retention periods
+
 WEEK_MEMORY = LongTermMemory(
     storage=LTMSQLiteStorage(
         db_path=f"{STORAGE_DIR}/week_memory.db"
@@ -33,7 +33,7 @@ emconfig = {
             "provider": "google",
             "config": {
                 "api_key": gapi,
-                "model": "models/gemini-embedding-001"  # or "text-embedding-preview-0409"
+                "model": "models/gemini-embedding-001" 
             }
         }
 rag_tool = PDFSearchTool(config = dict(llm = dict(
@@ -53,8 +53,6 @@ SHORT_TERM_MEMORY=ShortTermMemory(
                     path="./memory/"
                 )
             )
-
-# --- Import custom tools ---
 from .tools.youtube_search_tool import youtube_search_tool
 from .tools.pg_tool import insert_summary_tool, fetch_latest_summary_tool
 from .tools.survey_email_template import get_survey_email
@@ -115,9 +113,7 @@ def gmail_send_email(recipient_email: str, subject: str = "Daily Gym Feedback", 
     if not gmail_send_tool:
         return "Error: Gmail tool not initialized."
     try:
-        # Always use the template from get_survey_email()
         email_body = get_survey_email()
-        
         # Send the email with HTML enabled
         result = gmail_send_tool(
             recipient_email=recipient_email,
@@ -289,16 +285,16 @@ class GymManagerCrew:
                 self.chef(),
             ],
             tasks=[
-                self.send_daily_survey_task(),         # First task: Send the survey
+                self.send_daily_survey_task(),
                 self.summarize_responses_task(),
-                self.review_pain_task(),   # Second task: Process responses
-                self.generate_workout_plan_task(),     # Then the rest of the tasks
+                self.review_pain_task(), 
+                self.generate_workout_plan_task(),   
                 self.nutrition_plan_task(),
                 self.chef_meal_plan_task(),
             ],
-            process=Process.sequential,  # Ensure tasks run in order
-            memory=True,  # Enable memory for the entire crew
-            long_term_memory=LongTermMemory(  # Global memory for the crew
+            process=Process.sequential,
+            memory=True,
+            long_term_memory=LongTermMemory(
                 storage=LTMSQLiteStorage(
                     db_path=f"{STORAGE_DIR}/crew_memory.db"
                 )
@@ -307,7 +303,7 @@ class GymManagerCrew:
             "provider": "google",
             "config": {
                 "api_key": gapi,
-                "model": "models/gemini-embedding-001"  # or "text-embedding-preview-0409"
+                "model": "models/gemini-embedding-001"
             }
         },
             llm=llma
