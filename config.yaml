@@ -1,0 +1,5 @@
+adapter: chroma
+collection_name: workout_summaries
+embedding:
+  provider: huggingface
+  model: all-MiniLM-L6-v2

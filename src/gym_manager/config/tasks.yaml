@@ -1,0 +1,76 @@
+send_daily_survey_task:
+  description: >
+    Daily, send the daily gym feedback Google Form to {recipient_email} asking for workout details:
+    - Did you go to the gym today? (Y/N)
+    - What muscle did you train?
+    - Did you do cardio?
+    - List exercises and sets
+    - Did you experience any pain? If yes, describe when and where it occurred
+  expected_output: >
+    A Gmail message sent with the survey link.
+  human_input : true
+  agent: survey_agent
+
+summarize_responses_task:
+  description: >
+    1. Fetch the latest response from the Google Form's response sheet
+    2. Summarize it in the desired format
+    3. Insert the structured summary into the Postgres database
+  expected_output: >
+    Fetched form response, summarized it, and inserted into the database.
+  agent: summarizer
+  
+
+review_pain_task:
+  description: >
+    Review today's pain_notes from the latest DB entry.
+    Suggest corrective stretches, relief methods, or changes to prevent injury.
+    Also suggest to the Gym Trainer what adjustments might be needed in tomorrow's workout plan.
+    Provide helpful YouTube videos for each suggestion.
+  expected_output: >
+    A structured list of recommendations with YouTube video links.
+  agent: doctor
+  output_file: outputs/review_pain.json
+  
+
+generate_workout_plan_task:
+  description: >
+    Fetch the latest workout summary from Postgres.
+    Generate a workout plan for tomorrow based on recovery, pain, and balance focused on {goal}
+    Take into consideration the Doctor's advice for tomorrow's workout plan.
+    Include YouTube links for posture corrections.
+  expected_output: >
+    A detailed workout plan with 1-2 YouTube videos.
+  agent: trainer
+  output_file: outputs/workout_plan.json
+  
+nutrition_plan_task:
+  description: >
+    Based on the latest workout_type, summary, and pain_notes,
+    create pre- and post-workout nutrition guidelines for the user including how many grams of protein,carbs and fat to take and if they need any supplements.
+    Take into account the Gym Trainer's comments on how well the user is doing in the gym.
+    Take into account the user's current gym timetable and fitness goals.
+    Pass this nutrition guidelines to the Chef agent for meal planning.
+  expected_output: >
+    A nutrition plan tailored to the user’s recovery and fitness goals.
+  agent: nutritionist
+  output_file: outputs/nutrition_plan.json
+
+chef_meal_plan_task:
+  description: >
+    Convert the nutrition plan provided by the Nutritionist into a 3-meal Indian food plan (breakfast, lunch, dinner) taking into account the user's current gym timetable and fitness goals.
+    Add YouTube recipe links for each dish.
+  expected_output: >
+    A 3-meal Indian food plan with recipe links.
+  agent: chef
+  output_file: outputs/food.json
+
+check_gym_plans_task:
+  description: >
+    Check what the user's goals are for their gym plans whether it is bulking, cutting or maintenance.
+    Check the weekly timetable for gym plans and suggest those to the Gym Trainer and Doctor agents.
+  expected_output: >
+    The user's gym goals and weekly timetable.
+  agent: planner
+
+
